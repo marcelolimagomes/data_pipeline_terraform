@@ -2,7 +2,8 @@ resource "helm_release" "postgresql" {
   name             = "postgresql"
   repository       = "https://charts.bitnami.com/bitnami"
   chart            = "postgresql"
-  namespace        = "postgres"
+  namespace        = kubernetes_namespace.postgres.metadata[0].name
+  depends_on       = [kubernetes_namespace.postgres]
   create_namespace = true
   set {
     name  = "global.postgresql.auth.database"

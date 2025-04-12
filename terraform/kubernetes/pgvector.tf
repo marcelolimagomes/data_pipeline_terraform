@@ -2,7 +2,8 @@ resource "helm_release" "pgvector" {
   name             = "pgvector"
   repository       = "https://charts.bitnami.com/bitnami"
   chart            = "postgresql"
-  namespace        = "pgvector"
+  namespace        = kubernetes_namespace.pgvector.metadata[0].name
+  depends_on       = [kubernetes_namespace.pgvector]
   create_namespace = true
   set {
     name  = "image.repository"
