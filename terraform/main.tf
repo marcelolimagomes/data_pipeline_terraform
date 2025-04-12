@@ -1,32 +1,36 @@
-terraform {
-  required_providers {
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 2.0"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.0"
-    }
-  }
+resource "docker_network" "app_network" {
+  name   = "${var.project_name}-network"
+  driver = "bridge"
 }
 
-provider "kubernetes" {
-  host                   = "https://${data.external.minikube_ip.result.ip}:8443"
-  client_certificate     = file("~/.minikube/profiles/minikube/client.crt")
-  client_key             = file("~/.minikube/profiles/minikube/client.key")
-  cluster_ca_certificate = file("~/.minikube/ca.crt")
+resource "docker_volume" "minio_data" {
+  name = "${var.project_name}-minio-data"
 }
 
-provider "helm" {
-  kubernetes {
-    host                   = "https://${data.external.minikube_ip.result.ip}:8443"
-    client_certificate     = file("~/.minikube/profiles/minikube/client.crt")
-    client_key             = file("~/.minikube/profiles/minikube/client.key")
-    cluster_ca_certificate = file("~/.minikube/ca.crt")
-  }
+resource "docker_volume" "kafka_data" {
+  name = "${var.project_name}-kafka-data"
 }
 
-data "external" "minikube_ip" {
-  program = ["bash", "-c", "echo '{\"ip\": \"'$(minikube ip)'\"}'"]
+resource "docker_volume" "zookeeper_data" {
+  name = "${var.project_name}-zookeeper-data"
+}
+
+resource "docker_volume" "postgres_data" {
+  name = "${var.project_name}-postgres-data"
+}
+
+resource "docker_volume" "pgvector_data" {
+  name = "${var.project_name}-pgvector-data"
+}
+
+resource "docker_volume" "metabase_data" {
+  name = "${var.project_name}-metabase-data"
+}
+
+resource "docker_volume" "kafka_ui_data" {
+  name = "${var.project_name}-kafka-ui-data"
+}
+
+resource "docker_volume" "jupyter_data" {
+  name = "${var.project_name}-jupyter-data"
 }

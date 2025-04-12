@@ -1,50 +1,27 @@
-output "minio_namespace_status" {
-  value       = kubernetes_namespace.minio.metadata[0].name
-  description = "Status do namespace minio"
+output "minio_endpoint" {
+  value = "http://localhost:9000"
 }
 
-output "airflow_namespace_status" {
-  value       = kubernetes_namespace.airflow.metadata[0].name
-  description = "Status do namespace airflow"
+output "airflow_webserver" {
+  value = "http://localhost:8080"
 }
 
-output "kafka_namespace_status" {
-  value       = kubernetes_namespace.kafka.metadata[0].name
-  description = "Status do namespace kafka"
+output "metabase_endpoint" {
+  value = "http://localhost:3000"
 }
 
-output "postgres_namespace_status" {
-  value       = kubernetes_namespace.postgres.metadata[0].name
-  description = "Status do namespace postgres"
+output "postgres_endpoint" {
+  value = "postgresql://airflow:airflow@localhost:5433/airflow"
 }
 
-output "pgvector_namespace_status" {
-  value       = kubernetes_namespace.pgvector.metadata[0].name
-  description = "Status do namespace pgvector"
+output "pgvector_endpoint" {
+  value = "postgresql://pgvector:pgvector@localhost:5432/vector_db"
 }
 
-resource "kubernetes_namespace" "minio" {
-  metadata {
-    name = "minio"
-  }
+output "kafka_ui_endpoint" {
+  value = "http://localhost:8081"
 }
-resource "kubernetes_namespace" "airflow" {
-  metadata {
-    name = "airflow"
-  }
-}
-resource "kubernetes_namespace" "kafka" {
-  metadata {
-    name = "kafka"
-  }
-}
-resource "kubernetes_namespace" "postgres" {
-  metadata {
-    name = "postgres"
-  }
-}
-resource "kubernetes_namespace" "pgvector" {
-  metadata {
-    name = "pgvector"
-  }
+
+output "jupyter_endpoint" {
+  value = "http://localhost:8888"
 }
