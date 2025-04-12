@@ -26,7 +26,7 @@ O projeto inclui os seguintes serviços, todos conectados via uma rede Docker (a
 1.  **MinIO**: Armazenamento de objetos compatível com S3.
 2.  **Apache Kafka & Zookeeper**: Sistema de mensageria para streaming.
 3.  **Apache Airflow**: Orquestração de pipelines de dados.
-4.  **PostgreSQL**: Banco relacional com bancos airflow, metabase, e citech\_datamart.
+4.  **PostgreSQL**: Banco relacional com os bancos airflow, metabase data marts.
 5.  **PGVector**: Banco vetorial para dados de embeddings.
 6.  **Metabase**: Ferramenta de visualização open-source.
 7.  **Kafka UI**: Interface para gerenciar clusters Kafka.
