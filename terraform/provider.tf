@@ -7,4 +7,6 @@ terraform {
   }
 }
 
-provider "docker" {}
+provider "docker" {
+  host = "unix:///run/user/1000/docker.sock"
+}
