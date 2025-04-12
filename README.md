@@ -66,189 +66,146 @@ Siga os passos abaixo para configurar o projeto do zero em uma máquina Ubuntu:
 
 Atualize o sistema e instale as ferramentas necessárias:
 
-bash
-
-CollapseWrapCopy
-
-`sudo apt update && sudo apt upgrade -y sudo apt install -y curl unzip git`
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl unzip git
+```
 
 #### Instalar Docker e Docker Compose
 
-bash
+```bash
+# Instalar Docker
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
 
-CollapseWrapCopy
+# Adicionar usuário ao grupo docker
+sudo usermod -aG docker $USER
+newgrp docker
 
-`# Instalar Docker sudo apt install -y docker.io sudo systemctl start docker sudo systemctl enable docker # Adicionar usuário ao grupo docker sudo usermod -aG docker $USER newgrp docker # Instalar Docker Compose sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose sudo chmod +x /usr/local/bin/docker-compose docker-compose --version`
+# Instalar Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+```
 
 #### Instalar Terraform
 
-bash
-
-CollapseWrapCopy
-
-`# Baixar Terraform wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip unzip terraform_1.6.6_linux_amd64.zip sudo mv terraform /usr/local/bin/ terraform --version rm terraform_1.6.6_linux_amd64.zip`
+```bash
+# Baixar Terraform
+wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+unzip terraform_1.6.6_linux_amd64.zip
+sudo mv terraform /usr/local/bin/
+terraform --version
+rm terraform_1.6.6_linux_amd64.zip
+```
 
 ### 2\. Clonar o Repositório
 
 Clone o projeto do GitHub:
 
-bash
-
-CollapseWrapCopy
-
-`git clone https://github.com/marcelolimagomes/data-pipeline-terraform.git cd data-pipeline-terraform`
+```bash
+git clone https://github.com/marcelolimagomes/data-pipeline-terraform.git
+cd data-pipeline-terraform
+```
 
 ### 3\. Configurar Permissões
 
-Crie os diretórios necessários e ajuste permissões para evitar erros (ex.: permissões do Airflow, 12/04/2025, 13:35):
+Crie os diretórios necessários e ajuste permissões para evitar erros (ex.: permissões do Airflow):
 
-bash
-
-CollapseWrapCopy
-
-`mkdir -p airflow-data/logs airflow-data/dags airflow-data/plugins dags scripts sudo chown -R 1000:0 airflow-data dags sudo chmod -R 775 airflow-data dags`
+```bash
+mkdir -p airflow-data/logs airflow-data/dags airflow-data/plugins dags scripts
+sudo chown -R 1000:0 airflow-data dags
+sudo chmod -R 775 airflow-data dags
+```
 
 ### 4\. Criar Arquivo de Inicialização do PostgreSQL
 
-Crie o arquivo scripts/init.sql para inicializar bancos no PostgreSQL:
+Crie o arquivo `scripts/init.sql` para inicializar bancos no PostgreSQL:
 
-bash
-
-CollapseWrapCopy
-
-`cat <<EOF > scripts/init.sql CREATE DATABASE metabase; EOF`
+```bash
+cat <<EOF > scripts/init.sql
+CREATE DATABASE metabase;
+EOF
+```
 
 ### 5\. Configurar Terraform
 
 Inicialize e aplique a configuração do Terraform para criar volumes e redes:
 
-bash
+```bash
+cd terraform
+terraform init
+terraform apply -auto-approve
+cd ..
+```
 
-CollapseWrapCopy
-
-`cd terraform terraform init terraform apply -auto-approve cd ..`
-
-Isso cria os volumes Docker (minio-data, postgres-data, etc.) e a rede app-network.
+Isso cria os volumes Docker (`minio-data`, `postgres-data`, etc.) e a rede `app-network`.
 
 ### 6\. Iniciar os Serviços
 
 Execute o Docker Compose para subir todos os serviços:
 
-bash
+```bash
+docker compose up -d
+```
 
-CollapseWrapCopy
-
-`docker compose up -d`
-
-O serviço init-permissions ajustará permissões do diretório airflow-data automaticamente.
+O serviço `init-permissions` ajustará permissões do diretório `airflow-data` automaticamente.
 
 ### 7\. Verificar os Serviços
 
 Confirme que todos os serviços estão rodando:
 
-bash
+```bash
+docker compose ps
+```
 
-CollapseWrapCopy
-
-`docker compose ps`
-
-Você deve ver os serviços minio, kafka, zookeeper, airflow, postgres, pgvector, metabase, kafka-ui, jupyter, e init-permissions (este último sai após executar).
+Você deve ver os serviços `minio`, `kafka`, `zookeeper`, `airflow`, `postgres`, `pgvector`, `metabase`, `kafka-ui`, `jupyter`, e `init-permissions` (este último sai após executar).
 
 ### 8\. Acessar os Serviços
 
 Use as URLs e credenciais abaixo para acessar cada serviço:
 
-Serviço
-
-URL
-
-Credenciais
-
-Notas
-
-MinIO
-
-[http://localhost:9000](http://localhost:9000/)
-
-minioadmin:miniopassword
-
-Console em [http://localhost:9001](http://localhost:9001/)
-
-Airflow
-
-[http://localhost:8080](http://localhost:8080/)
-
-admin:admin
-
-Configurado com LocalExecutor
-
-PostgreSQL
-
-localhost:5433
-
-airflow:airflow
-
-Bancos: airflow, metabase, citech\_datamart
-
-PGVector
-
-localhost:5432
-
-pgvector:pgvector
-
-Banco: vector\_db
-
-Metabase
-
-[http://localhost:3000](http://localhost:3000/)
-
-Configurar na primeira execução
-
-Conecta ao banco metabase
-
-Kafka UI
-
-[http://localhost:8081](http://localhost:8081/)
-
-N/A
-
-Monitora Kafka e Zookeeper
-
-Jupyter Lab
-
-[http://localhost:8888](http://localhost:8888/)
-
-Token: mysecrettoken
-
-Inclui bibliotecas Python (boto3, kafka-python)
+| Serviço     | URL                               | Credenciais             | Notas                                         |
+|-------------|-----------------------------------|--------------------------|-----------------------------------------------|
+| MinIO       | [http://localhost:9000](http://localhost:9000/) | minioadmin:miniopassword | Console em [http://localhost:9001](http://localhost:9001/) |
+| Airflow     | [http://localhost:8080](http://localhost:8080/) | admin:admin              | Configurado com LocalExecutor                 |
+| PostgreSQL  | localhost:5433                    | airflow:airflow          | Bancos: airflow, metabase, citech\_datamart    |
+| PGVector    | localhost:5432                    | pgvector:pgvector        | Banco: vector\_db                              |
+| Metabase    | [http://localhost:3000](http://localhost:3000/) | Configurar na primeira execução | Conecta ao banco metabase                     |
+| Kafka UI    | [http://localhost:8081](http://localhost:8081/) | N/A                      | Monitora Kafka e Zookeeper                    |
+| Jupyter Lab | [http://localhost:8888](http://localhost:8888/) | Token: mysecrettoken     | Inclui bibliotecas Python (boto3, kafka-python) |
 
 Exemplo para conectar ao PostgreSQL:
 
-bash
+```bash
+psql -h localhost -p 5433 -U airflow -d airflow
+```
+### 9. Configurar DAGs no Airflow (Opcional)
 
-CollapseWrapCopy
+Adicione suas DAGs ao diretório `dags/`:
 
-`psql -h localhost -p 5433 -U airflow -d airflow`
+```bash
+touch dags/meu_pipeline.py
+```
 
-### 9\. Configurar DAGs no Airflow (Opcional)
+Edite `meu_pipeline.py` com seu código Airflow. Exemplo:
 
-Adicione suas DAGs ao diretório dags/:
+```python
+from airflow import DAG
+from airflow.operators.dummy import DummyOperator
+from datetime import datetime
 
-bash
+with DAG(
+    'meu_pipeline',
+    start_date=datetime(2025, 1, 1),
+    schedule_interval=None
+) as dag:
+    task1 = DummyOperator(task_id='inicio')
+    task1
+```
 
-CollapseWrapCopy
-
-`touch dags/meu_pipeline.py`
-
-Edite meu\_pipeline.py com seu código Airflow. Exemplo:
-
-python
-
-CollapseWrapCopy
-
-`from airflow import DAG from airflow.operators.dummy import DummyOperator from datetime import datetime with DAG('meu_pipeline', start_date=datetime(2025, 1, 1), schedule_interval=None) as dag: task1 = DummyOperator(task_id='inicio') task1`
-
-As DAGs aparecerão automaticamente em [http://localhost:8080](http://localhost:8080/).
+As DAGs aparecerão automaticamente na interface do Airflow em [http://localhost:8080](http://localhost:8080/).
 
 ## Detalhes dos Serviços
 
