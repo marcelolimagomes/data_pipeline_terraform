@@ -1,6 +1,6 @@
 # Data Pipeline Terraform
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 **Data Pipeline Terraform** é uma prova de conceito (PoC) para a construção de um pipeline de dados moderno, utilizando ferramentas open-source e infraestrutura como código. O projeto combina **Terraform** e **Docker Compose** para configurar um ambiente completo de forma automatizada, ideal para aprendizado, experimentação e desenvolvimento de pipelines de dados.
 
@@ -34,7 +34,6 @@ O projeto inclui os seguintes serviços, todos conectados via uma rede Docker (a
 9.  **init-permissions**: Serviço auxiliar para configurar permissões do Airflow.
 
 ```mermaid
-
 graph TD
     MinIO[MinIO] -->|Dados de Objetos| Airflow[Airflow]
     Kafka[Kafka] -->|Streaming de Dados| Airflow[Airflow]
@@ -302,62 +301,64 @@ As DAGs aparecerão automaticamente na interface do Airflow em [http://localhost
 
 ## Estrutura do Projeto
 
-plaintext
-
-CollapseWrapCopy
-
-`data-pipeline-terraform/ ├── .env # Configura UID/GID do Airflow ├── Dockerfile # Imagem personalizada do Jupyter ├── requirements.txt # Dependências Python do Jupyter ├── docker-compose.yml # Definição dos serviços ├── scripts/ │ └── init.sql # Inicializa bancos PostgreSQL ├── dags/ # DAGs do Airflow ├── airflow-data/ # Logs, plugins, e configurações do Airflow │ ├── logs/ │ ├── plugins/ │ └── airflow.cfg ├── jupyter/ # Contexto para build do Jupyter └── terraform/ # Configurações do Terraform ├── main.tf └── variables.tf`
+```
+data-pipeline-terraform/
+├── .env                 # Configura UID/GID do Airflow
+├── Dockerfile           # Imagem personalizada do Jupyter
+├── requirements.txt     # Dependências Python do Jupyter
+├── docker-compose.yml   # Definição dos serviços
+├── scripts/
+│   └── init.sql         # Inicializa bancos PostgreSQL
+├── dags/                # DAGs do Airflow
+├── airflow-data/        # Logs, plugins, e configurações do Airflow
+│   ├── logs/
+│   ├── plugins/
+│   └── airflow.cfg
+├── jupyter/             # Contexto para build do Jupyter
+└── terraform/           # Configurações do Terraform
+    ├── main.tf
+    └── variables.tf
+```
 
 ## Possíveis Problemas e Soluções
 
 -   **Permissões no Airflow**:
-    -   Erro: PermissionError: /opt/airflow/logs/scheduler.
+    -   Erro: `PermissionError: /opt/airflow/logs/scheduler`.
     -   Solução:
-        
-        bash
-        
-        CollapseWrapCopy
-        
-        `sudo chown -R 1000:0 airflow-data sudo chmod -R 775 airflow-data docker compose up -d --force-recreate airflow`
-        
+        ```bash
+        sudo chown -R 1000:0 airflow-data
+        sudo chmod -R 775 airflow-data
+        docker compose up -d --force-recreate airflow
+        ```
 -   **Conflito de portas**:
     -   Erro: Porta 5432 ou 5433 em uso.
     -   Solução:
-        
-        bash
-        
-        CollapseWrapCopy
-        
-        `sudo netstat -tuln | grep 5432 sudo kill <PID>`
-        
+        ```bash
+        sudo netstat -tuln | grep 5432
+        sudo kill <PID>
+        ```
 -   **Metabase não conecta ao PostgreSQL**:
-    -   Erro: UnknownHostException: postgres.
+    -   Erro: `UnknownHostException: postgres`.
     -   Solução:
-        
-        bash
-        
-        CollapseWrapCopy
-        
-        `docker compose up -d --force-recreate postgres metabase`
-        
+        ```bash
+        docker compose up -d --force-recreate postgres metabase
+        ```
 -   **Imagem corrompida**:
     -   Solução:
-        
-        bash
-        
-        CollapseWrapCopy
-        
-        `docker compose rm -f <serviço> docker rmi <imagem> docker compose up -d <serviço>`
-        
+        ```bash
+        docker compose rm -f <serviço>
+        docker rmi <imagem>
+        docker compose up -d <serviço>
+        ```
 
 ## Contribuindo
 
 Contribuições são bem-vindas! Para contribuir:
 
 1.  Fork o repositório.
-2.  Crie uma branch (git checkout -b feature/nova-funcionalidade).
-3.  Commit suas mudanças (git commit -m "Adiciona nova funcionalidade").
-4.  Push para a branch (git push origin feature/nova-funcionalidade).
+2.  Crie uma branch (`git checkout -b feature/nova-funcionalidade`).
+3.  Commit suas mudanças (`git commit -m "Adiciona nova funcionalidade"`).
+4.  Push para a branch (`git push origin feature/nova-funcionalidade`).
 5.  Abra um Pull Request.
 
 ## Licença
