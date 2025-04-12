@@ -12,4 +12,16 @@ resource "helm_release" "pgvector" {
     name  = "image.tag"
     value = "latest"
   }
+  set {
+    name  = "global.postgresql.auth.database"
+    value = "pgvector"
+  }
+  set {
+    name  = "global.postgresql.auth.username"
+    value = "postgres"
+  }
+  set {
+    name  = "global.postgresql.auth.password"
+    value = "postgres"
+  }
 }

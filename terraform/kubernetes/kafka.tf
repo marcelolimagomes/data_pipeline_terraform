@@ -4,4 +4,8 @@ resource "helm_release" "kafka" {
   chart            = "kafka"
   namespace        = "kafka"
   create_namespace = true
+  set {
+    name  = "replicaCount"
+    value = "1"
+  }
 }

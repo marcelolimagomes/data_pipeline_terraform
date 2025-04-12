@@ -8,4 +8,12 @@ resource "helm_release" "postgresql" {
     name  = "global.postgresql.auth.database"
     value = "myapp"
   }
+  set {
+    name  = "global.postgresql.auth.username"
+    value = "postgres"
+  }
+  set {
+    name  = "global.postgresql.auth.password"
+    value = "postgres"
+  }
 }

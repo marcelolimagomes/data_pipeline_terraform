@@ -4,4 +4,8 @@ resource "helm_release" "airflow" {
   chart            = "airflow"
   namespace        = "airflow"
   create_namespace = true
+  set {
+    name  = "executor"
+    value = "KubernetesExecutor"
+  }
 }

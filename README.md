@@ -48,7 +48,7 @@ Antes de começar, certifique-se de que sua máquina atende às premissas acima.
 ## Estrutura do Projeto
 
 ```plaintext
-aws-local-dev/
+data_pipeline_terraform/
 ├── terraform/
 │   ├── localstack/
 │   │   ├── s3.tf
@@ -73,7 +73,7 @@ Siga os passos abaixo para configurar e executar o ambiente.
 
 ```bash
 git clone <URL_DO_REPOSITORIO>
-cd aws-local-dev
+cd data_pipeline_terraform
 ```
 
 ### 2. Instalar Dependências
