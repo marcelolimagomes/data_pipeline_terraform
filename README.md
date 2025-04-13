@@ -1,8 +1,8 @@
-# Data Pipeline Terraform
+# Data Pipeline Docker Terraform
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-**Data Pipeline Terraform** é uma prova de conceito (PoC) para a construção de um pipeline de dados moderno, utilizando ferramentas open-source e infraestrutura como código. O projeto combina **Terraform** e **Docker Compose** para configurar um ambiente completo de forma automatizada, ideal para aprendizado, experimentação e desenvolvimento de pipelines de dados.
+**Data Pipeline Docker Terraform** é uma prova de conceito (PoC) para a construção de um pipeline de dados moderno, utilizando ferramentas open-source e infraestrutura como código. O projeto combina **Terraform** e **Docker Compose** para configurar um ambiente completo de forma automatizada, ideal para aprendizado, experimentação e desenvolvimento de pipelines de dados.
 
 Este projeto foi desenvolvido para demonstrar a integração de ferramentas populares em um ambiente local, simulando cenários reais de ingestão, armazenamento, processamento e visualização de dados. Ele é perfeito para estudantes, engenheiros de dados e entusiastas que desejam explorar um pipeline completo.
 
